@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
-  "version": "0.0.0",
+  "name": "get-status",
+  "version": "0.0.1",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "Github action to get the status checks of a given ref",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -15,21 +15,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/danieldeichfuss/get-status.git"
   },
   "keywords": [
     "actions",
     "node",
     "setup"
   ],
-  "author": "",
+  "author": "Daniel Deichfuß <d.deichfuss@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.6.0"
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^16.11.4",
-    "@typescript-eslint/parser": "^5.1.0",,
+    "@typescript-eslint/parser": "^5.1.0",
     "eslint": "^8.1.0",
     "@vercel/ncc": "^0.31.1",
     "eslint-plugin-github": "^4.1.1",
