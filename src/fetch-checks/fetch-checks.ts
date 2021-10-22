@@ -1,7 +1,15 @@
+import * as pluginRestEndpointMethods from '@octokit/plugin-rest-endpoint-methods'
 import {context, getOctokit} from '@actions/github'
-// import {PushEvent} from '@octokit/webhooks-definitions/schema'
 
-export async function fetchChecks({ref, token}: {ref: string; token: string}) {
+export async function fetchChecks({
+  ref,
+  token
+}: {
+  ref: string
+  token: string
+}): Promise<
+  pluginRestEndpointMethods.RestEndpointMethodTypes['checks']['listSuitesForRef']['response']
+> {
   const octokit = getOctokit(token)
   const checks = await octokit.rest.checks.listSuitesForRef({
     owner: context.repo.owner,
