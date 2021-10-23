@@ -16,6 +16,6 @@ export async function fetchChecks({
     repo: context.repo.repo,
     ref
   })
-  console.log(checks)
+
   return checks
 }
