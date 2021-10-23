@@ -8,14 +8,23 @@ export async function fetchChecks({
   ref: string
   token: string
 }): Promise<
-  pluginRestEndpointMethods.RestEndpointMethodTypes['checks']['listSuitesForRef']['response']
+  | pluginRestEndpointMethods.RestEndpointMethodTypes['checks']['listSuitesForRef']['response']
+  | undefined
 > {
-  const octokit = getOctokit(token)
-  const checks = await octokit.rest.checks.listSuitesForRef({
-    owner: context.repo.owner,
-    repo: context.repo.repo,
-    ref
-  })
+  let checks
+
+  console.log({ref, token, owner: context.repo.owner, repo: context.repo.repo})
+
+  try {
+    const octokit = getOctokit(token)
+    checks = await octokit.rest.checks.listSuitesForRef({
+      owner: context.repo.owner,
+      repo: context.repo.repo,
+      ref
+    })
+  } catch (error) {
+    console.log({error})
+  }
 
   return checks
 }

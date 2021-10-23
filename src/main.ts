@@ -5,10 +5,11 @@ import {fetchChecks} from './fetch-checks'
 async function run(): Promise<void> {
   try {
     const ref = core.getInput('ref')
-    const token = core.getInput('github-token')
+    const token = core.getInput('token')
     console.log(`Ref input: ${ref}`)
+    console.log(`Token input: ${token}`)
 
-    console.log(await fetchChecks({token, ref}))
+    console.log('fetchChecks', await fetchChecks({token, ref}))
 
     core.setOutput('all-checks-completed', true)
     core.setOutput('all-checks-passed', false)
