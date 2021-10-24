@@ -1,18 +1,16 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import {fetchChecks} from './fetch-checks'
+import {getStatus} from './get-status'
 
 async function run(): Promise<void> {
   try {
     const ref = core.getInput('ref')
     const token = core.getInput('token')
-    console.log(`Ref input: ${ref}`)
-    console.log(`Token input: ${token}`)
 
-    console.log('fetchChecks', await fetchChecks({token, ref}))
+    const statusChecks = getStatus({ref, token})
 
-    core.setOutput('all-checks-completed', true)
-    core.setOutput('all-checks-passed', false)
+    core.setOutput('all-checks-completed', statusChecks.allChecksCompleted)
+    core.setOutput('all-checks-passed', statusChecks.allChecksPassed)
 
     const payload = JSON.stringify(github.context.payload, undefined, 2)
     console.log(`The event payload: ${payload}`)
