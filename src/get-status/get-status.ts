@@ -1,9 +1,6 @@
-interface Status {
-  allChecksCompleted: boolean
-  allChecksPassed: boolean
-}
+import {ActionInput, ActionOutput} from '../types'
 
-export function getStatus(): Status {
+export function getStatus({ref, token}: ActionInput): ActionOutput {
   return {
     allChecksCompleted: true,
     allChecksPassed: true
