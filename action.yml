@@ -1,11 +1,18 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Get Status'
+description: 'Get the status checks of a given ref.'
 inputs:
-  milliseconds: # change this
+  ref:
+    description: 'Git ref, e.g. the sha.'
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  token:
+    description: The GitHub token used to create an authenticated client
+    default: ${{ github.token }}
+    required: false
+outputs:
+  all-checks-completed:
+    description: 'Returns true if all checks are completed.'
+  all-checks-passed:
+    description: 'Returns true if all checks concluded either with success or skipped.'
 runs:
   using: 'node12'
   main: 'dist/index.js'

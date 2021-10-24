@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
-  "version": "0.0.0",
+  "name": "get-status",
+  "version": "0.0.1",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "Github action to get the status checks of a given ref",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -11,31 +11,36 @@
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
     "test": "jest",
+    "test:with-build": "npm run build && npm run test",
     "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/danieldeichfuss/get-status.git"
   },
   "keywords": [
     "actions",
     "node",
     "setup"
   ],
-  "author": "",
+  "author": "Daniel Deichfuß <d.deichfuss@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.6.0"
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.0"
   },
   "devDependencies": {
+    "@octokit/plugin-rest-endpoint-methods": "^5.13.0",
     "@types/node": "^16.11.4",
-    "@typescript-eslint/parser": "^5.1.0",,
-    "eslint": "^8.1.0",
+    "@typescript-eslint/parser": "^5.1.0",
     "@vercel/ncc": "^0.31.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint": "^7.32.0",
     "eslint-plugin-github": "^4.1.1",
     "eslint-plugin-jest": "^25.2.2",
     "jest": "^27.0.6",
     "js-yaml": "^4.1.0",
+    "msw": "^0.35.0",
     "prettier": "2.4.1",
     "ts-jest": "^27.0.7",
     "typescript": "^4.1.3"
