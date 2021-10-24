@@ -5,8 +5,8 @@
 /* eslint-disable filenames/match-regex */
 
 process.env['GITHUB_REPOSITORY'] = 'danieldeichfuss/get-status'
-process.env['INPUT_TOKEN'] = '12345'
-process.env['INPUT_REF'] = '12345'
+process.env['INPUT_TOKEN'] = 'token'
+process.env['INPUT_REF'] = 'ref'
 
 const {server} = require('./mocks/server.js')
 // Establish API mocking before all tests.
