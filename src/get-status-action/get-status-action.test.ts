@@ -1,12 +1,7 @@
 import {getStatusAction} from './get-status-action'
 import {it, expect, jest} from '@jest/globals'
 
-it('should get the inputs for the action', () => {
-  expect(getStatusAction()).toEqual({
-    allChecksCompleted: true,
-    allChecksPassed: true
-  })
-})
+it('should get the inputs for the action', () => {})
 
 it('should call getStatus with the inputs', () => {})
 
