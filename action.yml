@@ -4,7 +4,7 @@ inputs:
   ref:
     description: 'Git ref, e.g. the sha.'
     required: true
-  github-token:
+  token:
     description: The GitHub token used to create an authenticated client
     default: ${{ github.token }}
     required: false
