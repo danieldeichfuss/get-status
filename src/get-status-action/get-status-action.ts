@@ -1,5 +1,4 @@
 import * as core from '@actions/core'
-import * as github from '@actions/github'
 import {getStatus} from '../get-status'
 
 export function getStatusAction(): void {
@@ -14,9 +13,6 @@ export function getStatusAction(): void {
 
     core.setOutput('all-checks-completed', statusChecks.allChecksCompleted)
     core.setOutput('all-checks-passed', statusChecks.allChecksPassed)
-
-    const payload = JSON.stringify(github.context.payload, undefined, 2)
-    console.log(`The event payload: ${payload}`)
   } catch (error) {
     core.setFailed((error as Error).message)
   }
