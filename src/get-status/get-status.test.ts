@@ -1,7 +1,6 @@
 import {getStatus} from './get-status'
-import {it, expect} from '@jest/globals'
+import {fetchChecks} from '../fetch-checks'
 
-it('should return true if all checks completed', () => {
   const ref = 'ref'
   const token = 'token'
 
