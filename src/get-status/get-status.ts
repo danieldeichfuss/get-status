@@ -5,8 +5,8 @@ export async function getStatus({
   ref,
   token
 }: ActionInput): Promise<ActionOutput> {
-  const checksResponse = await fetchChecks({ref, token})
-  const checkSuites = checksResponse?.data.check_suites
+  const checks = await fetchChecks({ref, token})
+  const checkSuites = checks?.check_suites
 
   const allChecksCompleted =
     checkSuites?.every(checkSuite => {
