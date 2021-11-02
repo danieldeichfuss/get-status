@@ -1,12 +1,12 @@
 import * as core from '@actions/core'
 import {getStatus} from '../get-status'
 
-export function getStatusAction(): void {
+export async function getStatusAction(): Promise<void> {
   try {
     const ref = core.getInput('ref')
     const token = core.getInput('token')
 
-    const statusChecks = getStatus({
+    const statusChecks = await getStatus({
       ref,
       token
     })

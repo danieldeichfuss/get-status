@@ -11,13 +11,13 @@ export async function fetchChecks({
   | pluginRestEndpointMethods.RestEndpointMethodTypes['checks']['listSuitesForRef']['response']
   | undefined
 > {
-  let checks
+  let checksResponse
 
   console.log({ref, token, owner: context.repo.owner, repo: context.repo.repo})
 
   try {
     const octokit = getOctokit(token)
-    checks = await octokit.rest.checks.listSuitesForRef({
+    checksResponse = await octokit.rest.checks.listSuitesForRef({
       owner: context.repo.owner,
       repo: context.repo.repo,
       ref
@@ -26,5 +26,6 @@ export async function fetchChecks({
     console.log({error})
   }
 
-  return checks
+  // TODO: Return only the body not the whole response
+  return checksResponse
 }
