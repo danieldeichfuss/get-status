@@ -11,21 +11,11 @@ export async function fetchChecks({
   | pluginRestEndpointMethods.RestEndpointMethodTypes['checks']['listSuitesForRef']['response']['data']
   | undefined
 > {
-  let checks
-
-  console.log({ref, token, owner: context.repo.owner, repo: context.repo.repo})
-
-  try {
-    const octokit = getOctokit(token)
-    const checksResponse = await octokit.rest.checks.listSuitesForRef({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      ref
-    })
-    checks = checksResponse.data
-  } catch (error) {
-    console.log({error})
-  }
-
-  return checks
+  const octokit = getOctokit(token)
+  const checksResponse = await octokit.rest.checks.listSuitesForRef({
+    owner: context.repo.owner,
+    repo: context.repo.repo,
+    ref
+  })
+  return checksResponse.data
 }
