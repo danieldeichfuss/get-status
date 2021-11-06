@@ -8,7 +8,8 @@ jest.mock('@actions/core', () => {
   return {
     getInput: jest.fn().mockImplementation(input => input),
     setOutput: jest.fn(),
-    setFailed: jest.fn()
+    setFailed: jest.fn(),
+    info: jest.fn()
   }
 })
 

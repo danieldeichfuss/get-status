@@ -100,10 +100,10 @@ const core = __importStar(__nccwpck_require__(2186));
 const get_status_1 = __nccwpck_require__(9148);
 function getStatusAction() {
     return __awaiter(this, void 0, void 0, function* () {
-        core.info('TEST');
         try {
             const ref = core.getInput('ref');
             const token = core.getInput('token');
+            core.info(`Running action for ref ${ref}`);
             const statusChecks = yield (0, get_status_1.getStatus)({
                 ref,
                 token
