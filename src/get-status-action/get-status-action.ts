@@ -2,10 +2,11 @@ import * as core from '@actions/core'
 import {getStatus} from '../get-status'
 
 export async function getStatusAction(): Promise<void> {
-  core.info('TEST')
   try {
     const ref = core.getInput('ref')
     const token = core.getInput('token')
+
+    core.info(`Running action for ref ${ref}`)
 
     const statusChecks = await getStatus({
       ref,
