@@ -11,6 +11,9 @@ export async function getStatusAction(): Promise<void> {
       token
     })
 
+    core.info(`all-checks-completed: ${statusChecks.allChecksCompleted}`)
+    core.info(`all-checks-passed: ${statusChecks.allChecksPassed}`)
+
     core.setOutput('all-checks-completed', statusChecks.allChecksCompleted)
     core.setOutput('all-checks-passed', statusChecks.allChecksPassed)
   } catch (error) {
