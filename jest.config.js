@@ -6,5 +6,6 @@ module.exports = {
     '^.+\\.ts$': 'ts-jest'
   },
   verbose: true,
-  setupFilesAfterEnv: ['./jest.setup.js']
+  setupFilesAfterEnv: ['./jest.setup.js'],
+  coveragePathIgnorePatterns: ['/mocks/*']
 }
