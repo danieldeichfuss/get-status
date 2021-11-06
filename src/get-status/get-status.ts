@@ -8,18 +8,20 @@ export async function getStatus({
   const checks = await fetchChecks({ref, token})
   const checkSuites = checks?.check_suites
 
-  const allChecksCompleted =
-    checkSuites?.every(checkSuite => {
-      checkSuite.status === 'completed'
-    }) || false
+  const allChecksCompleted = checkSuites?.every(checkSuite => {
+    return checkSuite.status === 'completed'
+  })
 
-  const allChecksPassed =
-    checkSuites?.every(checkSuite => {
-      checkSuite.conclusion === 'success' || 'neutral' || 'skipped'
-    }) || false
+  const allChecksPassed = checkSuites?.every(checkSuite => {
+    return (
+      checkSuite.conclusion === 'success' ||
+      checkSuite.conclusion === 'neutral' ||
+      checkSuite.conclusion === 'skipped'
+    )
+  })
 
   return {
-    allChecksCompleted,
-    allChecksPassed
+    allChecksCompleted: allChecksCompleted || false,
+    allChecksPassed: allChecksPassed || false
   }
 }
