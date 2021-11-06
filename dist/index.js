@@ -20,14 +20,19 @@ exports.fetchChecks = void 0;
 const github_1 = __nccwpck_require__(5438);
 function fetchChecks({ ref, token }) {
     return __awaiter(this, void 0, void 0, function* () {
-        const octokit = (0, github_1.getOctokit)(token);
-        const checksResponse = yield octokit.rest.checks.listSuitesForRef({
-            owner: github_1.context.repo.owner,
-            repo: github_1.context.repo.repo,
-            ref
-        });
-        console.log(checksResponse.data);
-        return checksResponse.data;
+        let checksResponse;
+        try {
+            const octokit = (0, github_1.getOctokit)(token);
+            checksResponse = yield octokit.rest.checks.listSuitesForRef({
+                owner: github_1.context.repo.owner,
+                repo: github_1.context.repo.repo,
+                ref
+            });
+        }
+        catch (error) {
+            console.error(error);
+        }
+        return checksResponse === null || checksResponse === void 0 ? void 0 : checksResponse.data;
     });
 }
 exports.fetchChecks = fetchChecks;
