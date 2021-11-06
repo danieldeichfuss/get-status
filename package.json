@@ -10,7 +10,7 @@
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
-    "test": "jest",
+    "test": "jest --coverage",
     "test:with-build": "npm run build && npm run test",
     "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
   },
@@ -31,11 +31,12 @@
   },
   "devDependencies": {
     "@octokit/plugin-rest-endpoint-methods": "^5.13.0",
+    "@types/jest": "^27.0.2",
     "@types/node": "^16.11.4",
     "@typescript-eslint/parser": "^5.1.0",
     "@vercel/ncc": "^0.31.1",
-    "eslint-config-prettier": "^8.3.0",
     "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-github": "^4.1.1",
     "eslint-plugin-jest": "^25.2.2",
     "jest": "^27.3.1",

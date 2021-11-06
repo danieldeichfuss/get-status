@@ -1,5 +1,4 @@
 import {getStatusAction} from './get-status-action'
-import {it, expect, jest, beforeEach} from '@jest/globals'
 import {getStatus} from '../get-status'
 import * as core from '@actions/core'
 
@@ -13,19 +12,15 @@ jest.mock('@actions/core', () => {
   }
 })
 
-beforeEach(() => {
-  jest.clearAllMocks()
-})
-
-it('should get the inputs for the action', () => {
-  getStatusAction()
+it('should get the inputs for the action', async () => {
+  await getStatusAction()
 
   expect(core.getInput).toHaveBeenCalledWith('ref')
   expect(core.getInput).toHaveBeenCalledWith('token')
 })
 
-it('should call getStatus with the inputs', () => {
-  getStatusAction()
+it('should call getStatus with the inputs', async () => {
+  await getStatusAction()
 
   expect(getStatus).toHaveBeenCalledWith({
     ref: 'ref',
@@ -33,25 +28,26 @@ it('should call getStatus with the inputs', () => {
   })
 })
 
-it('should set the action output', () => {
-  ;(getStatus as any).mockReturnValue({
+it('should set the action output', async () => {
+  ;(getStatus as jest.Mock).mockResolvedValue({
     allChecksCompleted: true,
     allChecksPassed: true
   })
 
-  getStatusAction()
+  await getStatusAction()
 
   expect(core.setOutput).toHaveBeenCalledWith('all-checks-completed', true)
   expect(core.setOutput).toHaveBeenCalledWith('all-checks-passed', true)
 })
 
-it('should set the action to failed', () => {
+it('should set the action to failed', async () => {
   const errorMessage = 'test error'
-  ;(getStatus as any).mockImplementation(() => {
+
+  ;(getStatus as jest.Mock).mockImplementation(() => {
     throw new Error(errorMessage)
   })
 
-  getStatusAction()
+  await getStatusAction()
 
   expect(core.setFailed).toHaveBeenCalledWith(errorMessage)
 })
