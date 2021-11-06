@@ -100,6 +100,7 @@ const core = __importStar(__nccwpck_require__(2186));
 const get_status_1 = __nccwpck_require__(9148);
 function getStatusAction() {
     return __awaiter(this, void 0, void 0, function* () {
+        core.info('TEST');
         try {
             const ref = core.getInput('ref');
             const token = core.getInput('token');
@@ -107,6 +108,8 @@ function getStatusAction() {
                 ref,
                 token
             });
+            core.info(`all-checks-completed: ${statusChecks.allChecksCompleted}`);
+            core.info(`all-checks-passed: ${statusChecks.allChecksPassed}`);
             core.setOutput('all-checks-completed', statusChecks.allChecksCompleted);
             core.setOutput('all-checks-passed', statusChecks.allChecksPassed);
         }
