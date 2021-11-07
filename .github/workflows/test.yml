@@ -21,4 +21,5 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          ref: ${{ github.sha }}
+          # ref: ${{ github.sha }}
+          ref: '9ff065b6ca612bb0d052e18bc2d3cdf147f3e5c8'
