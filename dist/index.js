@@ -28,6 +28,32 @@ function fetchChecks({ ref, token }) {
                 repo: github_1.context.repo.repo,
                 ref
             });
+            const combinedStatus = yield octokit.rest.repos.getCombinedStatusForRef({
+                owner: github_1.context.repo.owner,
+                repo: github_1.context.repo.repo,
+                ref
+            });
+            const commitStatuses = yield octokit.rest.repos.listCommitStatusesForRef({
+                owner: github_1.context.repo.owner,
+                repo: github_1.context.repo.repo,
+                ref
+            });
+            const checkRuns = yield octokit.rest.checks.listForRef({
+                owner: github_1.context.repo.owner,
+                repo: github_1.context.repo.repo,
+                ref
+            });
+            const checkSuites = yield octokit.rest.checks.listSuitesForRef({
+                owner: github_1.context.repo.owner,
+                repo: github_1.context.repo.repo,
+                ref
+            });
+            console.log({
+                combinedStatus,
+                commitStatuses,
+                checkRuns,
+                checkSuites
+            });
         }
         catch (error) {
             console.error(error);
