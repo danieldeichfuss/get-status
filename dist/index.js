@@ -20,33 +20,19 @@ exports.fetchChecks = void 0;
 const github_1 = __nccwpck_require__(5438);
 function fetchChecks({ ref, token }) {
     return __awaiter(this, void 0, void 0, function* () {
-        let checksResponse;
+        let checkRuns;
         try {
             const octokit = (0, github_1.getOctokit)(token);
-            checksResponse = yield octokit.rest.checks.listSuitesForRef({
+            checkRuns = yield octokit.rest.checks.listForRef({
                 owner: github_1.context.repo.owner,
                 repo: github_1.context.repo.repo,
                 ref
-            });
-            const checkRuns = yield octokit.rest.checks.listForRef({
-                owner: github_1.context.repo.owner,
-                repo: github_1.context.repo.repo,
-                ref
-            });
-            const checkSuites = yield octokit.rest.checks.listSuitesForRef({
-                owner: github_1.context.repo.owner,
-                repo: github_1.context.repo.repo,
-                ref
-            });
-            console.log({
-                checkRuns: checkRuns.data.check_runs,
-                checkSuites: checkSuites.data.check_suites
             });
         }
         catch (error) {
             console.error(error);
         }
-        return checksResponse === null || checksResponse === void 0 ? void 0 : checksResponse.data;
+        return checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.data;
     });
 }
 exports.fetchChecks = fetchChecks;
@@ -198,15 +184,15 @@ const fetch_checks_1 = __nccwpck_require__(4476);
 function getStatus({ ref, token }) {
     return __awaiter(this, void 0, void 0, function* () {
         const checks = yield (0, fetch_checks_1.fetchChecks)({ ref, token });
-        const checkSuites = checks === null || checks === void 0 ? void 0 : checks.check_suites;
+        const checkRuns = checks === null || checks === void 0 ? void 0 : checks.check_runs;
         core.info(`Check Suites: ${JSON.stringify(checks)}`);
-        const allChecksCompleted = checkSuites === null || checkSuites === void 0 ? void 0 : checkSuites.every(checkSuite => {
-            return checkSuite.status === 'completed';
+        const allChecksCompleted = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.every(checkRun => {
+            return checkRun.status === 'completed';
         });
-        const allChecksPassed = checkSuites === null || checkSuites === void 0 ? void 0 : checkSuites.every(checkSuite => {
-            return (checkSuite.conclusion === 'success' ||
-                checkSuite.conclusion === 'neutral' ||
-                checkSuite.conclusion === 'skipped');
+        const allChecksPassed = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.every(checkRun => {
+            return (checkRun.conclusion === 'success' ||
+                checkRun.conclusion === 'neutral' ||
+                checkRun.conclusion === 'skipped');
         });
         return {
             allChecksCompleted: allChecksCompleted || false,

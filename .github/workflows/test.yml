@@ -16,12 +16,9 @@ jobs:
       - run: |
           npm run all
   test: # make sure the action works on a clean machine without building
-    name: 'Bla'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          # ref: ${{ github.sha }}
-          ref: '9ff065b6ca612bb0d052e18bc2d3cdf147f3e5c8'
-      - run: echo ${{ github.job }}
+          ref: ${{ github.sha }}

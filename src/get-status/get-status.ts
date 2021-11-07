@@ -7,19 +7,19 @@ export async function getStatus({
   token
 }: ActionInput): Promise<ActionOutput> {
   const checks = await fetchChecks({ref, token})
-  const checkSuites = checks?.check_suites
+  const checkRuns = checks?.check_runs
 
   core.info(`Check Suites: ${JSON.stringify(checks)}`)
 
-  const allChecksCompleted = checkSuites?.every(checkSuite => {
-    return checkSuite.status === 'completed'
+  const allChecksCompleted = checkRuns?.every(checkRun => {
+    return checkRun.status === 'completed'
   })
 
-  const allChecksPassed = checkSuites?.every(checkSuite => {
+  const allChecksPassed = checkRuns?.every(checkRun => {
     return (
-      checkSuite.conclusion === 'success' ||
-      checkSuite.conclusion === 'neutral' ||
-      checkSuite.conclusion === 'skipped'
+      checkRun.conclusion === 'success' ||
+      checkRun.conclusion === 'neutral' ||
+      checkRun.conclusion === 'skipped'
     )
   })
 
