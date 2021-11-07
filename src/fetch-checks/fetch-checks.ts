@@ -21,18 +21,6 @@ export async function fetchChecks({
       ref
     })
 
-    const combinedStatus = await octokit.rest.repos.getCombinedStatusForRef({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      ref
-    })
-
-    const commitStatuses = await octokit.rest.repos.listCommitStatusesForRef({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      ref
-    })
-
     const checkRuns = await octokit.rest.checks.listForRef({
       owner: context.repo.owner,
       repo: context.repo.repo,
@@ -46,10 +34,8 @@ export async function fetchChecks({
     })
 
     console.log({
-      combinedStatus,
-      commitStatuses,
-      checkRuns,
-      checkSuites
+      checkRuns: checkRuns.data.check_runs,
+      checkSuites: checkSuites.data.check_suites
     })
   } catch (error) {
     console.error(error)
