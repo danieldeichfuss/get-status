@@ -188,10 +188,11 @@ function getStatus({ ref, token }) {
         const checkRuns = checks === null || checks === void 0 ? void 0 : checks.check_runs;
         core.info(`Check Suites: ${JSON.stringify(checks)}`);
         core.info(`Context: ${JSON.stringify(github_1.context)}`);
-        const allChecksCompleted = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.every(checkRun => {
+        const previousCheckRuns = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.filter(checkRun => checkRun.name !== 'get-status');
+        const allChecksCompleted = previousCheckRuns === null || previousCheckRuns === void 0 ? void 0 : previousCheckRuns.every(checkRun => {
             return checkRun.status === 'completed';
         });
-        const allChecksPassed = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.every(checkRun => {
+        const allChecksPassed = previousCheckRuns === null || previousCheckRuns === void 0 ? void 0 : previousCheckRuns.every(checkRun => {
             return (checkRun.conclusion === 'success' ||
                 checkRun.conclusion === 'neutral' ||
                 checkRun.conclusion === 'skipped');

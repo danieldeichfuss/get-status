@@ -13,11 +13,15 @@ export async function getStatus({
   core.info(`Check Suites: ${JSON.stringify(checks)}`)
   core.info(`Context: ${JSON.stringify(context)}`)
 
-  const allChecksCompleted = checkRuns?.every(checkRun => {
+  const previousCheckRuns = checkRuns?.filter(
+    checkRun => checkRun.name !== 'get-status'
+  )
+
+  const allChecksCompleted = previousCheckRuns?.every(checkRun => {
     return checkRun.status === 'completed'
   })
 
-  const allChecksPassed = checkRuns?.every(checkRun => {
+  const allChecksPassed = previousCheckRuns?.every(checkRun => {
     return (
       checkRun.conclusion === 'success' ||
       checkRun.conclusion === 'neutral' ||
