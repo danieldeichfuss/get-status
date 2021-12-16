@@ -180,12 +180,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getStatus = void 0;
 const core = __importStar(__nccwpck_require__(2186));
+const github_1 = __nccwpck_require__(5438);
 const fetch_checks_1 = __nccwpck_require__(4476);
 function getStatus({ ref, token }) {
     return __awaiter(this, void 0, void 0, function* () {
         const checks = yield (0, fetch_checks_1.fetchChecks)({ ref, token });
         const checkRuns = checks === null || checks === void 0 ? void 0 : checks.check_runs;
         core.info(`Check Suites: ${JSON.stringify(checks)}`);
+        core.info(`Context: ${JSON.stringify(github_1.context)}`);
         const allChecksCompleted = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.every(checkRun => {
             return checkRun.status === 'completed';
         });
