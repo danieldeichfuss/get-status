@@ -1,4 +1,4 @@
-import checkSuites from '../../mocks/__fixtures__/check-suites.get.json'
+import checkRuns from '../../mocks/__fixtures__/check-runs.get.json'
 import {fetchChecks} from './fetch-checks'
 import github from '@actions/github'
 
@@ -24,7 +24,7 @@ it('should fetch checks', async () => {
     getOctokit: () => ({
       rest: {
         checks: {
-          listForRef: jest.fn().mockResolvedValue({data: checkSuites})
+          listForRef: jest.fn().mockResolvedValue({data: checkRuns})
         }
       }
     })
@@ -32,7 +32,7 @@ it('should fetch checks', async () => {
 
   const result = await fetchChecks({ref: '1234567', token: 'token'})
 
-  expect(result).toEqual(checkSuites)
+  expect(result).toEqual(checkRuns)
 })
 
 it('should log the error', async () => {
