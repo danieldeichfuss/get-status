@@ -1,6 +1,69 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 7870:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.fetchChecks = void 0;
+const github_1 = __importDefault(__nccwpck_require__(5438));
+function fetchChecks({ ref, token }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let checkRuns;
+        try {
+            const octokit = github_1.default.getOctokit(token);
+            checkRuns = yield octokit.rest.checks.listForRef({
+                owner: github_1.default.context.repo.owner,
+                repo: github_1.default.context.repo.repo,
+                ref
+            });
+        }
+        catch (error) {
+            console.error(error);
+        }
+        return checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.data;
+    });
+}
+exports.fetchChecks = fetchChecks;
+
+
+/***/ }),
+
+/***/ 4476:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__nccwpck_require__(7870), exports);
+
+
+/***/ }),
+
 /***/ 4444:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -25,27 +88,38 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getStatusAction = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-const github = __importStar(__nccwpck_require__(5438));
 const get_status_1 = __nccwpck_require__(9148);
 function getStatusAction() {
-    try {
-        const ref = core.getInput('ref');
-        const token = core.getInput('token');
-        const statusChecks = (0, get_status_1.getStatus)({
-            ref,
-            token
-        });
-        core.setOutput('all-checks-completed', statusChecks.allChecksCompleted);
-        core.setOutput('all-checks-passed', statusChecks.allChecksPassed);
-        const payload = JSON.stringify(github.context.payload, undefined, 2);
-        console.log(`The event payload: ${payload}`);
-    }
-    catch (error) {
-        core.setFailed(error.message);
-    }
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const ref = core.getInput('ref');
+            const token = core.getInput('token');
+            core.info(`Running action for ref ${ref}`);
+            const statusChecks = yield (0, get_status_1.getStatus)({
+                ref,
+                token
+            });
+            core.info(`all-checks-completed: ${statusChecks.allChecksCompleted}`);
+            core.info(`all-checks-passed: ${statusChecks.allChecksPassed}`);
+            core.setOutput('all-checks-completed', statusChecks.allChecksCompleted);
+            core.setOutput('all-checks-passed', statusChecks.allChecksPassed);
+        }
+        catch (error) {
+            core.setFailed(error.message);
+        }
+    });
 }
 exports.getStatusAction = getStatusAction;
 
@@ -74,18 +148,71 @@ __exportStar(__nccwpck_require__(4444), exports);
 /***/ }),
 
 /***/ 4199:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getStatus = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const fetch_checks_1 = __nccwpck_require__(4476);
 function getStatus({ ref, token }) {
-    console.log({ ref, token });
-    return {
-        allChecksCompleted: true,
-        allChecksPassed: true
-    };
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        const checks = yield (0, fetch_checks_1.fetchChecks)({ ref, token });
+        const checkRuns = checks === null || checks === void 0 ? void 0 : checks.check_runs;
+        core.debug(`Your ref has ${(_a = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.length) !== null && _a !== void 0 ? _a : 0} check runs.`);
+        const previousCheckRuns = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.filter(checkRun => checkRun.name !== 'get-status');
+        const hasNoOtherCheckRuns = !previousCheckRuns || previousCheckRuns.length === 0;
+        if (hasNoOtherCheckRuns) {
+            return {
+                allChecksCompleted: true,
+                allChecksPassed: true
+            };
+        }
+        const allChecksCompleted = previousCheckRuns === null || previousCheckRuns === void 0 ? void 0 : previousCheckRuns.every(checkRun => {
+            return checkRun.status === 'completed';
+        });
+        const allChecksPassed = previousCheckRuns === null || previousCheckRuns === void 0 ? void 0 : previousCheckRuns.every(checkRun => {
+            return (checkRun.conclusion === 'success' ||
+                checkRun.conclusion === 'neutral' ||
+                checkRun.conclusion === 'skipped');
+        });
+        core.debug(`All checks completed: ${allChecksCompleted}.`);
+        core.debug(`All checks passed: ${allChecksPassed}.`);
+        return {
+            allChecksCompleted: allChecksCompleted || false,
+            allChecksPassed: allChecksPassed || false
+        };
+    });
 }
 exports.getStatus = getStatus;
 

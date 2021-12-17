@@ -1,6 +1,6 @@
 import {getStatus} from './get-status'
 import {fetchChecks} from '../fetch-checks'
-import checkSuites from '../../mocks/__fixtures__/check-suites.get.json'
+import checkRuns from '../../mocks/__fixtures__/check-runs.get.json'
 
 jest.mock('../fetch-checks', () => ({
   fetchChecks: jest.fn()
@@ -10,7 +10,7 @@ const ref = 'ref'
 const token = 'token'
 
 it('should return true if all checks completed', async () => {
-  ;(fetchChecks as jest.Mock).mockResolvedValue(checkSuites)
+  ;(fetchChecks as jest.Mock).mockResolvedValue(checkRuns)
 
   expect(await getStatus({ref, token})).toEqual({
     allChecksCompleted: true,
@@ -19,12 +19,10 @@ it('should return true if all checks completed', async () => {
 })
 
 it('should return false if not completed and not passed', async () => {
-  const checkSuitesNotCompletedNotPassed = JSON.parse(
-    JSON.stringify(checkSuites)
-  )
-  checkSuitesNotCompletedNotPassed.check_suites[0].status = 'queued'
-  checkSuitesNotCompletedNotPassed.check_suites[0].conclusion = 'failure'
-  ;(fetchChecks as any).mockResolvedValue(checkSuitesNotCompletedNotPassed)
+  const checkRunsNotCompletedNotPassed = JSON.parse(JSON.stringify(checkRuns))
+  checkRunsNotCompletedNotPassed.check_runs[0].status = 'queued'
+  checkRunsNotCompletedNotPassed.check_runs[0].conclusion = 'failure'
+  ;(fetchChecks as any).mockResolvedValue(checkRunsNotCompletedNotPassed)
 
   expect(await getStatus({ref, token})).toEqual({
     allChecksCompleted: false,
@@ -33,9 +31,9 @@ it('should return false if not completed and not passed', async () => {
 })
 
 it('should return false if not completed', async () => {
-  const checkSuitesNotCompleted = JSON.parse(JSON.stringify(checkSuites))
-  checkSuitesNotCompleted.check_suites[0].status = 'in_progress'
-  ;(fetchChecks as any).mockResolvedValue(checkSuitesNotCompleted)
+  const checkRunsNotCompleted = JSON.parse(JSON.stringify(checkRuns))
+  checkRunsNotCompleted.check_runs[0].status = 'in_progress'
+  ;(fetchChecks as any).mockResolvedValue(checkRunsNotCompleted)
 
   expect(await getStatus({ref, token})).toEqual({
     allChecksCompleted: false,
@@ -44,12 +42,23 @@ it('should return false if not completed', async () => {
 })
 
 it('should return false if not passed', async () => {
-  const checkSuitesNotPassed = JSON.parse(JSON.stringify(checkSuites))
-  checkSuitesNotPassed.check_suites[0].conclusion = 'failed'
-  ;(fetchChecks as any).mockResolvedValue(checkSuitesNotPassed)
+  const checkRunsNotPassed = JSON.parse(JSON.stringify(checkRuns))
+  checkRunsNotPassed.check_runs[0].conclusion = 'failed'
+  ;(fetchChecks as any).mockResolvedValue(checkRunsNotPassed)
 
   expect(await getStatus({ref, token})).toEqual({
     allChecksCompleted: true,
     allChecksPassed: false
+  })
+})
+
+it('should return true if current check run is the only check run', async () => {
+  const onlyOneCheckRun = JSON.parse(JSON.stringify(checkRuns))
+  onlyOneCheckRun.check_runs[0].name = 'get-status'
+  ;(fetchChecks as any).mockResolvedValue(onlyOneCheckRun)
+
+  expect(await getStatus({ref, token})).toEqual({
+    allChecksCompleted: true,
+    allChecksPassed: true
   })
 })

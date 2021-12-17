@@ -1,3 +1,4 @@
+import * as core from '@actions/core'
 import {ActionInput, ActionOutput} from '../types'
 import {fetchChecks} from '../fetch-checks'
 
@@ -6,19 +7,38 @@ export async function getStatus({
   token
 }: ActionInput): Promise<ActionOutput> {
   const checks = await fetchChecks({ref, token})
-  const checkSuites = checks?.check_suites
+  const checkRuns = checks?.check_runs
 
-  const allChecksCompleted = checkSuites?.every(checkSuite => {
-    return checkSuite.status === 'completed'
+  core.debug(`Your ref has ${checkRuns?.length ?? 0} check runs.`)
+
+  const previousCheckRuns = checkRuns?.filter(
+    checkRun => checkRun.name !== 'get-status'
+  )
+
+  const hasNoOtherCheckRuns =
+    !previousCheckRuns || previousCheckRuns.length === 0
+
+  if (hasNoOtherCheckRuns) {
+    return {
+      allChecksCompleted: true,
+      allChecksPassed: true
+    }
+  }
+
+  const allChecksCompleted = previousCheckRuns?.every(checkRun => {
+    return checkRun.status === 'completed'
   })
 
-  const allChecksPassed = checkSuites?.every(checkSuite => {
+  const allChecksPassed = previousCheckRuns?.every(checkRun => {
     return (
-      checkSuite.conclusion === 'success' ||
-      checkSuite.conclusion === 'neutral' ||
-      checkSuite.conclusion === 'skipped'
+      checkRun.conclusion === 'success' ||
+      checkRun.conclusion === 'neutral' ||
+      checkRun.conclusion === 'skipped'
     )
   })
+
+  core.debug(`All checks completed: ${allChecksCompleted}.`)
+  core.debug(`All checks passed: ${allChecksPassed}.`)
 
   return {
     allChecksCompleted: allChecksCompleted || false,
