@@ -15,6 +15,16 @@ export async function getStatus({
     checkRun => checkRun.name !== 'get-status'
   )
 
+  const hasNoOtherCheckRuns =
+    !previousCheckRuns || previousCheckRuns.length === 0
+
+  if (hasNoOtherCheckRuns) {
+    return {
+      allChecksCompleted: true,
+      allChecksPassed: true
+    }
+  }
+
   const allChecksCompleted = previousCheckRuns?.every(checkRun => {
     return checkRun.status === 'completed'
   })

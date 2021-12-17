@@ -51,3 +51,14 @@ it('should return false if not passed', async () => {
     allChecksPassed: false
   })
 })
+
+it('should return true if current check run is the only check run', async () => {
+  const onlyOneCheckRun = JSON.parse(JSON.stringify(checkRuns))
+  onlyOneCheckRun.check_runs[0].name = 'get-status'
+  ;(fetchChecks as any).mockResolvedValue(onlyOneCheckRun)
+
+  expect(await getStatus({ref, token})).toEqual({
+    allChecksCompleted: true,
+    allChecksPassed: true
+  })
+})
