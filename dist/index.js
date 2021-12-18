@@ -192,8 +192,8 @@ function getStatus({ ref, token, ignore = [] }) {
         const checks = yield (0, fetch_checks_1.fetchChecks)({ ref, token });
         const checkRuns = checks === null || checks === void 0 ? void 0 : checks.check_runs;
         const ignoredCheckRunNames = ['get-status', ...ignore];
-        core.info(`Your ref has ${(_a = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.length) !== null && _a !== void 0 ? _a : 0} check runs.`);
-        core.info(`The following workflows will be ignored: ${ignoredCheckRunNames}`);
+        core.info(`Number of check runs: ${(_a = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.length) !== null && _a !== void 0 ? _a : 0}`);
+        core.info(`Ignored checks: ${ignoredCheckRunNames.join(', ')}`);
         const previousCheckRuns = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.filter(checkRun => !ignoredCheckRunNames.includes(checkRun.name));
         const hasNoOtherCheckRuns = !previousCheckRuns || previousCheckRuns.length === 0;
         if (hasNoOtherCheckRuns) {
@@ -210,8 +210,6 @@ function getStatus({ ref, token, ignore = [] }) {
                 checkRun.conclusion === 'neutral' ||
                 checkRun.conclusion === 'skipped');
         });
-        core.info(`All checks completed: ${allChecksCompleted}.`);
-        core.info(`All checks passed: ${allChecksPassed}.`);
         return {
             allChecksCompleted: allChecksCompleted || false,
             allChecksPassed: allChecksPassed || false
