@@ -11,8 +11,8 @@ export async function getStatus({
   const checkRuns = checks?.check_runs
   const ignoredCheckRunNames = ['get-status', ...ignore]
 
-  core.info(`Your ref has ${checkRuns?.length ?? 0} check runs.`)
-  core.info(`The following workflows will be ignored: ${ignoredCheckRunNames}`)
+  core.info(`Number of check runs: ${checkRuns?.length ?? 0}`)
+  core.info(`Ignored checks: ${ignoredCheckRunNames.join(', ')}`)
 
   const previousCheckRuns = checkRuns?.filter(
     checkRun => !ignoredCheckRunNames.includes(checkRun.name)
@@ -39,9 +39,6 @@ export async function getStatus({
       checkRun.conclusion === 'skipped'
     )
   })
-
-  core.info(`All checks completed: ${allChecksCompleted}.`)
-  core.info(`All checks passed: ${allChecksPassed}.`)
 
   return {
     allChecksCompleted: allChecksCompleted || false,
