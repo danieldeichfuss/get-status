@@ -1,5 +1,5 @@
 import * as pluginRestEndpointMethods from '@octokit/plugin-rest-endpoint-methods'
-import github from '@actions/github'
+import {context, getOctokit} from '@actions/github'
 
 export async function fetchChecks({
   ref,
@@ -14,11 +14,11 @@ export async function fetchChecks({
   let checkRuns
 
   try {
-    const octokit = github.getOctokit(token)
+    const octokit = getOctokit(token)
 
     checkRuns = await octokit.rest.checks.listForRef({
-      owner: github.context.repo.owner,
-      repo: github.context.repo.repo,
+      owner: context.repo.owner,
+      repo: context.repo.repo,
       ref
     })
   } catch (error) {
