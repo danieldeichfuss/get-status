@@ -9,7 +9,7 @@ export async function getStatus({
   const checks = await fetchChecks({ref, token})
   const checkRuns = checks?.check_runs
 
-  core.debug(`Your ref has ${checkRuns?.length ?? 0} check runs.`)
+  core.info(`Your ref has ${checkRuns?.length ?? 0} check runs.`)
 
   const previousCheckRuns = checkRuns?.filter(
     checkRun => checkRun.name !== 'get-status'
@@ -37,8 +37,8 @@ export async function getStatus({
     )
   })
 
-  core.debug(`All checks completed: ${allChecksCompleted}.`)
-  core.debug(`All checks passed: ${allChecksPassed}.`)
+  core.info(`All checks completed: ${allChecksCompleted}.`)
+  core.info(`All checks passed: ${allChecksPassed}.`)
 
   return {
     allChecksCompleted: allChecksCompleted || false,
