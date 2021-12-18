@@ -18,6 +18,7 @@ it('should get the inputs for the action', async () => {
 
   expect(core.getInput).toHaveBeenCalledWith('ref')
   expect(core.getInput).toHaveBeenCalledWith('token')
+  expect(core.getInput).toHaveBeenCalledWith('ignore')
 })
 
 it('should call getStatus with the inputs', async () => {
@@ -25,7 +26,8 @@ it('should call getStatus with the inputs', async () => {
 
   expect(getStatus).toHaveBeenCalledWith({
     ref: 'ref',
-    token: 'token'
+    token: 'token',
+    ignore: ['ignore']
   })
 })
 

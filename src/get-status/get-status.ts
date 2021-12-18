@@ -4,15 +4,18 @@ import {fetchChecks} from '../fetch-checks'
 
 export async function getStatus({
   ref,
-  token
+  token,
+  ignore = []
 }: ActionInput): Promise<ActionOutput> {
   const checks = await fetchChecks({ref, token})
   const checkRuns = checks?.check_runs
+  const ignoredCheckRunNames = ['get-status', ...ignore]
 
   core.info(`Your ref has ${checkRuns?.length ?? 0} check runs.`)
+  core.info(`The following workflows will be ignored: ${ignoredCheckRunNames}`)
 
   const previousCheckRuns = checkRuns?.filter(
-    checkRun => checkRun.name !== 'get-status'
+    checkRun => !ignoredCheckRunNames.includes(checkRun.name)
   )
 
   const hasNoOtherCheckRuns =
