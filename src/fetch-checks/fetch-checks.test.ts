@@ -14,10 +14,6 @@ const githubMock = {
   }
 }
 
-beforeEach(() => {
-  ;(github as any) = githubMock
-})
-
 it('should fetch checks', async () => {
   ;(github as any) = {
     ...githubMock,

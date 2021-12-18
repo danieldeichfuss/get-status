@@ -18,6 +18,19 @@ it('should return true if all checks completed', async () => {
   })
 })
 
+it('should return true if only ignored checks are failing', async () => {
+  const checkRunsNotCompletedNotPassed = JSON.parse(JSON.stringify(checkRuns))
+  checkRunsNotCompletedNotPassed.check_runs[0].status = 'queued'
+  checkRunsNotCompletedNotPassed.check_runs[0].conclusion = 'failure'
+  checkRunsNotCompletedNotPassed.check_runs[0].name = 'ignore-me'
+  ;(fetchChecks as any).mockResolvedValue(checkRunsNotCompletedNotPassed)
+
+  expect(await getStatus({ref, token, ignore: ['ignore-me']})).toEqual({
+    allChecksCompleted: true,
+    allChecksPassed: true
+  })
+})
+
 it('should return false if not completed and not passed', async () => {
   const checkRunsNotCompletedNotPassed = JSON.parse(JSON.stringify(checkRuns))
   checkRunsNotCompletedNotPassed.check_runs[0].status = 'queued'

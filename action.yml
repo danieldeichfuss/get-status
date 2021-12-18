@@ -5,8 +5,11 @@ inputs:
     description: 'Git ref, e.g. the sha.'
     required: true
   token:
-    description: The GitHub token used to create an authenticated client
+    description: 'The GitHub token used to create an authenticated client.'
     default: ${{ github.token }}
+    required: false
+  ignore:
+    description: 'Workflow names that will be ignored during the validation. For multiple values, please separate them with commas, e.g. "test,build,get-status"'
     required: false
 outputs:
   all-checks-completed:

@@ -106,10 +106,12 @@ function getStatusAction() {
         try {
             const ref = core.getInput('ref');
             const token = core.getInput('token');
+            const ignore = core.getInput('ignore').split(',');
             core.info(`Running action for ref ${ref}`);
             const statusChecks = yield (0, get_status_1.getStatus)({
                 ref,
-                token
+                token,
+                ignore
             });
             core.info(`all-checks-completed: ${statusChecks.allChecksCompleted}`);
             core.info(`all-checks-passed: ${statusChecks.allChecksPassed}`);
@@ -184,13 +186,15 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getStatus = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const fetch_checks_1 = __nccwpck_require__(4476);
-function getStatus({ ref, token }) {
+function getStatus({ ref, token, ignore = [] }) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         const checks = yield (0, fetch_checks_1.fetchChecks)({ ref, token });
         const checkRuns = checks === null || checks === void 0 ? void 0 : checks.check_runs;
-        core.debug(`Your ref has ${(_a = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.length) !== null && _a !== void 0 ? _a : 0} check runs.`);
-        const previousCheckRuns = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.filter(checkRun => checkRun.name !== 'get-status');
+        const ignoredCheckRunNames = ['get-status', ...ignore];
+        core.info(`Your ref has ${(_a = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.length) !== null && _a !== void 0 ? _a : 0} check runs.`);
+        core.info(`The following workflows will be ignored: ${ignoredCheckRunNames}`);
+        const previousCheckRuns = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.filter(checkRun => !ignoredCheckRunNames.includes(checkRun.name));
         const hasNoOtherCheckRuns = !previousCheckRuns || previousCheckRuns.length === 0;
         if (hasNoOtherCheckRuns) {
             return {
@@ -206,8 +210,8 @@ function getStatus({ ref, token }) {
                 checkRun.conclusion === 'neutral' ||
                 checkRun.conclusion === 'skipped');
         });
-        core.debug(`All checks completed: ${allChecksCompleted}.`);
-        core.debug(`All checks passed: ${allChecksPassed}.`);
+        core.info(`All checks completed: ${allChecksCompleted}.`);
+        core.info(`All checks passed: ${allChecksPassed}.`);
         return {
             allChecksCompleted: allChecksCompleted || false,
             allChecksPassed: allChecksPassed || false

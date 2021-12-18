@@ -6,4 +6,5 @@ export interface ActionOutput {
 export interface ActionInput {
   ref: string
   token: string
+  ignore?: string[]
 }
