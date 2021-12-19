@@ -54,3 +54,25 @@ with:
   ref: ${{ github.sha }}
   ignore: 'test,build'
 ```
+
+## Example workflow
+
+```yml
+name: Get Status Sample Workflow
+
+on:
+  release:
+    types: [released]
+jobs:
+  get-status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Status of current ref
+        id: get-status
+        uses: danieldeichfuss/get-status@v0
+        with:
+          ref: ${{ github.sha }}
+      - name: Deploy to Production
+        if: ${{steps.get-status.outputs.all-checks-completed == 'true' &&  steps.get-status.outputs.all-checks-passed == 'true'}}
+        run: echo "Deploying to production"
+```

@@ -20,6 +20,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: ./
+      - name: Get Status of current ref
+        id: get-status
+        uses: ./
         with:
           ref: ${{ github.sha }}
+      - name: Only executes if all checks passed
+        if: ${{steps.get-status.outputs.all-checks-completed == 'true' &&  steps.get-status.outputs.all-checks-passed == 'true'}}
+        run: echo "Deploying to production"

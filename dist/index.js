@@ -6,6 +6,25 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -15,25 +34,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.fetchChecks = void 0;
-const github_1 = __importDefault(__nccwpck_require__(5438));
+const core = __importStar(__nccwpck_require__(2186));
+const github_1 = __nccwpck_require__(5438);
 function fetchChecks({ ref, token }) {
     return __awaiter(this, void 0, void 0, function* () {
         let checkRuns;
         try {
-            const octokit = github_1.default.getOctokit(token);
+            const octokit = (0, github_1.getOctokit)(token);
             checkRuns = yield octokit.rest.checks.listForRef({
-                owner: github_1.default.context.repo.owner,
-                repo: github_1.default.context.repo.repo,
+                owner: github_1.context.repo.owner,
+                repo: github_1.context.repo.repo,
                 ref
             });
         }
         catch (error) {
-            console.error(error);
+            core.error(error);
         }
         return checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.data;
     });
@@ -192,8 +209,8 @@ function getStatus({ ref, token, ignore = [] }) {
         const checks = yield (0, fetch_checks_1.fetchChecks)({ ref, token });
         const checkRuns = checks === null || checks === void 0 ? void 0 : checks.check_runs;
         const ignoredCheckRunNames = ['get-status', ...ignore];
-        core.info(`Your ref has ${(_a = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.length) !== null && _a !== void 0 ? _a : 0} check runs.`);
-        core.info(`The following workflows will be ignored: ${ignoredCheckRunNames}`);
+        core.info(`Number of check runs: ${(_a = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.length) !== null && _a !== void 0 ? _a : 0}`);
+        core.info(`Ignored checks: ${ignoredCheckRunNames.join(', ')}`);
         const previousCheckRuns = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.filter(checkRun => !ignoredCheckRunNames.includes(checkRun.name));
         const hasNoOtherCheckRuns = !previousCheckRuns || previousCheckRuns.length === 0;
         if (hasNoOtherCheckRuns) {
@@ -210,8 +227,6 @@ function getStatus({ ref, token, ignore = [] }) {
                 checkRun.conclusion === 'neutral' ||
                 checkRun.conclusion === 'skipped');
         });
-        core.info(`All checks completed: ${allChecksCompleted}.`);
-        core.info(`All checks passed: ${allChecksPassed}.`);
         return {
             allChecksCompleted: allChecksCompleted || false,
             allChecksPassed: allChecksPassed || false
