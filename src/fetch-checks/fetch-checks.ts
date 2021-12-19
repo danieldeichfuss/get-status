@@ -1,3 +1,4 @@
+import * as core from '@actions/core'
 import * as pluginRestEndpointMethods from '@octokit/plugin-rest-endpoint-methods'
 import {context, getOctokit} from '@actions/github'
 
@@ -22,7 +23,7 @@ export async function fetchChecks({
       ref
     })
   } catch (error) {
-    console.error(error)
+    core.error(error as Error)
   }
 
   return checkRuns?.data

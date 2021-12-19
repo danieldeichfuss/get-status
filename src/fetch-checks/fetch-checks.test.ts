@@ -1,15 +1,19 @@
+import * as core from '@actions/core'
 import checkRuns from '../../mocks/__fixtures__/check-runs.get.json'
 import {fetchChecks} from './fetch-checks'
 import {getOctokit, context} from '@actions/github'
 
 jest.mock('@actions/github')
-jest.spyOn(console, 'error').mockImplementation(() => undefined)
-;(context as any) = {
-  repo: {
-    owner: '',
-    repo: ''
+jest.mock('@actions/core')
+
+beforeAll(() => {
+  ;(context as any) = {
+    repo: {
+      owner: '',
+      repo: ''
+    }
   }
-}
+})
 
 it('should fetch checks', async () => {
   ;(getOctokit as any) = () => ({
@@ -38,5 +42,5 @@ it('should log the error', async () => {
 
   await fetchChecks({ref: '1234567', token: 'token'})
 
-  expect(console.error).toHaveBeenCalledWith(new Error('something went wrong'))
+  expect(core.error).toHaveBeenCalledWith(new Error('something went wrong'))
 })
