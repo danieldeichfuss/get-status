@@ -31,6 +31,17 @@ it('should return true if only ignored checks are failing', async () => {
   })
 })
 
+it('should return true if current check run is the only check run', async () => {
+  const onlyOneCheckRun = JSON.parse(JSON.stringify(checkRuns))
+  onlyOneCheckRun.check_runs[0].name = 'get-status'
+  ;(fetchChecks as any).mockResolvedValue(onlyOneCheckRun)
+
+  expect(await getStatus({ref, token})).toEqual({
+    allChecksCompleted: true,
+    allChecksPassed: true
+  })
+})
+
 it('should return false if not completed and not passed', async () => {
   const checkRunsNotCompletedNotPassed = JSON.parse(JSON.stringify(checkRuns))
   checkRunsNotCompletedNotPassed.check_runs[0].status = 'queued'
@@ -65,13 +76,11 @@ it('should return false if not passed', async () => {
   })
 })
 
-it('should return true if current check run is the only check run', async () => {
-  const onlyOneCheckRun = JSON.parse(JSON.stringify(checkRuns))
-  onlyOneCheckRun.check_runs[0].name = 'get-status'
-  ;(fetchChecks as any).mockResolvedValue(onlyOneCheckRun)
+it('should return false if check runs could not be fetched', async () => {
+  ;(fetchChecks as any).mockResolvedValue()
 
   expect(await getStatus({ref, token})).toEqual({
-    allChecksCompleted: true,
-    allChecksPassed: true
+    allChecksCompleted: false,
+    allChecksPassed: false
   })
 })
