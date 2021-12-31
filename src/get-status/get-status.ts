@@ -22,6 +22,7 @@ export async function getStatus({
 
   core.info(`Number of check runs: ${checkRuns.length}`)
   core.info(`Ignored checks: ${ignoredCheckRunNames.join(', ')}`)
+  core.debug(`Check Runs: ${JSON.stringify(checkRuns)}`)
 
   const previousCheckRuns = checkRuns.filter(
     checkRun => !ignoredCheckRunNames.includes(checkRun.name)
