@@ -1,0 +1,23 @@
+name: 'Sample Release Workflow'
+
+on:
+  release:
+    type: published
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get Status of current ref
+        id: get-status
+        uses: ./
+        with:
+          ref: ${{ github.sha }}
+      - name: Print status check results
+        run: |
+          echo "All checks completed: ${{steps.get-status.outputs.all-checks-completed}}"
+          echo "All checks passed: ${{steps.get-status.outputs.all-checks-passed}}"
+      - name: Only executes if all checks passed
+        if: ${{steps.get-status.outputs.all-checks-completed == 'true' &&  steps.get-status.outputs.all-checks-passed == 'true'}}
+        run: 'This only runs if all checks passed, now you can safely deploy to production'
