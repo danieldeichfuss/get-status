@@ -202,6 +202,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getStatus = void 0;
 const core = __importStar(__nccwpck_require__(2186));
+const github_1 = __nccwpck_require__(5438);
 const fetch_checks_1 = __nccwpck_require__(4476);
 function getStatus({ ref, token, ignore = [] }) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -214,10 +215,12 @@ function getStatus({ ref, token, ignore = [] }) {
                 allChecksPassed: false
             };
         }
-        const ignoredCheckRunNames = ['get-status', ...ignore];
+        const ignoredCheckRunNames = ['get-status', github_1.context.job, ...ignore];
         core.info(`Number of check runs: ${checkRuns.length}`);
+        core.debug(`Current Job: ${github_1.context.job}`);
         core.info(`Ignored checks: ${ignoredCheckRunNames.join(', ')}`);
-        core.debug(JSON.stringify(checkRuns));
+        core.debug(`Check Runs: ${JSON.stringify(checkRuns)}`);
+        core.debug(`Context: ${JSON.stringify(github_1.context)}`);
         const previousCheckRuns = checkRuns.filter(checkRun => !ignoredCheckRunNames.includes(checkRun.name));
         const hasNoOtherCheckRuns = !previousCheckRuns || previousCheckRuns.length === 0;
         if (hasNoOtherCheckRuns) {

@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import {ActionInput, ActionOutput} from '../types'
+import {context} from '@actions/github'
 import {fetchChecks} from '../fetch-checks'
 
 export async function getStatus({
@@ -18,11 +19,13 @@ export async function getStatus({
     }
   }
 
-  const ignoredCheckRunNames = ['get-status', ...ignore]
+  const ignoredCheckRunNames = ['get-status', context.job, ...ignore]
 
   core.info(`Number of check runs: ${checkRuns.length}`)
+  core.debug(`Current Job: ${context.job}`)
   core.info(`Ignored checks: ${ignoredCheckRunNames.join(', ')}`)
   core.debug(`Check Runs: ${JSON.stringify(checkRuns)}`)
+  core.debug(`Context: ${JSON.stringify(context)}`)
 
   const previousCheckRuns = checkRuns.filter(
     checkRun => !ignoredCheckRunNames.includes(checkRun.name)
