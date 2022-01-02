@@ -20,4 +20,4 @@ jobs:
           echo "All checks passed: ${{steps.get-status.outputs.all-checks-passed}}"
       - name: Only executes if all checks passed
         if: ${{steps.get-status.outputs.all-checks-completed == 'true' &&  steps.get-status.outputs.all-checks-passed == 'true'}}
-        run: 'This only runs if all checks passed, now you can safely deploy to production'
+        run: echo 'This only runs if all checks passed, now you can safely deploy to production'
