@@ -204,14 +204,21 @@ exports.getStatus = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const fetch_checks_1 = __nccwpck_require__(4476);
 function getStatus({ ref, token, ignore = [] }) {
-    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         const checks = yield (0, fetch_checks_1.fetchChecks)({ ref, token });
         const checkRuns = checks === null || checks === void 0 ? void 0 : checks.check_runs;
+        if (!checkRuns) {
+            core.info(`Check Runs could not be fetched`);
+            return {
+                allChecksCompleted: false,
+                allChecksPassed: false
+            };
+        }
         const ignoredCheckRunNames = ['get-status', ...ignore];
-        core.info(`Number of check runs: ${(_a = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.length) !== null && _a !== void 0 ? _a : 0}`);
+        core.info(`Number of check runs: ${checkRuns.length}`);
         core.info(`Ignored checks: ${ignoredCheckRunNames.join(', ')}`);
-        const previousCheckRuns = checkRuns === null || checkRuns === void 0 ? void 0 : checkRuns.filter(checkRun => !ignoredCheckRunNames.includes(checkRun.name));
+        core.debug(JSON.stringify(checkRuns));
+        const previousCheckRuns = checkRuns.filter(checkRun => !ignoredCheckRunNames.includes(checkRun.name));
         const hasNoOtherCheckRuns = !previousCheckRuns || previousCheckRuns.length === 0;
         if (hasNoOtherCheckRuns) {
             return {
@@ -219,10 +226,10 @@ function getStatus({ ref, token, ignore = [] }) {
                 allChecksPassed: true
             };
         }
-        const allChecksCompleted = previousCheckRuns === null || previousCheckRuns === void 0 ? void 0 : previousCheckRuns.every(checkRun => {
+        const allChecksCompleted = previousCheckRuns.every(checkRun => {
             return checkRun.status === 'completed';
         });
-        const allChecksPassed = previousCheckRuns === null || previousCheckRuns === void 0 ? void 0 : previousCheckRuns.every(checkRun => {
+        const allChecksPassed = previousCheckRuns.every(checkRun => {
             return (checkRun.conclusion === 'success' ||
                 checkRun.conclusion === 'neutral' ||
                 checkRun.conclusion === 'skipped');

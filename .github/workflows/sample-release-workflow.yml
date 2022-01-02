@@ -2,7 +2,7 @@ name: 'Sample Release Workflow'
 
 on:
   release:
-    type: [published]
+    types: [published, edited]
 
 jobs:
   deploy:
