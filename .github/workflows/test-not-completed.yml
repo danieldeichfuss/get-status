@@ -1,0 +1,12 @@
+name: 'Mock Workflow - Not Completed'
+
+on:
+  workflow_call:
+
+jobs:
+  wait:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait
+        run: echo "Start timer" && sleep 1000s
+        shell: bash

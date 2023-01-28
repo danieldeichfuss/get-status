@@ -1,20 +1,45 @@
-name: 'build-test'
+name: 'test'
 on: # rebuild any PRs and main branch changes
+  workflow_dispatch:
   pull_request:
   push:
     branches:
       - main
 
 jobs:
-  build: # make sure build/ci work properly
+  unit-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - run: |
-          yarn install
+          yarn install --frozen-lockfile
       - run: |
           yarn all
-  test: # make sure the action works on a clean machine without building
+  run-dummy-workflow-passed:
+    uses: ./.github/workflows/test-passed.yml
+  test-all-passed:
+    needs: run-dummy-workflow-passed
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Get Status of current ref
+        id: get-status
+        uses: ./
+        with:
+          ref: ${{ github.sha }}
+          token: ${{ github.token }}
+      - name: Only executes if all checks passed
+        if: ${{steps.get-status.outputs.all-checks-completed == 'true' &&  steps.get-status.outputs.all-checks-passed == 'true'}}
+        run: echo "Test successful"
+  run-dummy-workflow-not-completed:
+    uses: ./.github/workflows/test-not-completed.yml
+  test-not-completed:
+    needs: run-dummy-workflow-not-completed
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,6 +49,14 @@ jobs:
         uses: ./
         with:
           ref: ${{ github.sha }}
+          token: ${{ github.token }}
       - name: Only executes if all checks passed
-        if: ${{steps.get-status.outputs.all-checks-completed == 'true' &&  steps.get-status.outputs.all-checks-passed == 'true'}}
-        run: echo "Deploying to production"
+        if: ${{steps.get-status.outputs.all-checks-completed == 'false' &&  steps.get-status.outputs.all-checks-passed == 'true'}}
+        run: echo "Test successful"
+      - name: Cleanup dummy workflow
+        uses: vishnudxb/cancel-gh-workflow@v1.0
+        with:
+          repo: ${{ github.repository }}
+          branch_name: ${{ github.ref_name }}
+          workflow_file_name: test-not-completed.yml
+          access_token: ${{ github.token }}

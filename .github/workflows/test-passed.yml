@@ -1,0 +1,11 @@
+name: 'Mock Workflow - Passed'
+
+on:
+  workflow_call:
+
+jobs:
+  do-nothing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Do Nothing
+        run: echo "Done"
