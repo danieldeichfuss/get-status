@@ -1,4 +1,4 @@
-name: 'build-test'
+name: 'test'
 on: # rebuild any PRs and main branch changes
   pull_request:
   push:
@@ -6,23 +6,25 @@ on: # rebuild any PRs and main branch changes
       - main
 
 jobs:
-  build: # make sure build/ci work properly
+  unit-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: |
-          yarn install
+          yarn install --frozen-lockfile
       - run: |
           yarn all
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Get Status of current ref
         id: get-status
         uses: ./
         with:
           ref: ${{ github.sha }}
+          token: ${{ github.token }}
       - name: Only executes if all checks passed
-        if: ${{steps.get-status.outputs.all-checks-completed == 'true' &&  steps.get-status.outputs.all-checks-passed == 'true'}}
-        run: echo "Deploying to production"
+        if: ${{steps.get-status.outputs.all-checks-completed == 'false' &&  steps.get-status.outputs.all-checks-passed == 'true'}}
+        run: echo "Test successful"
