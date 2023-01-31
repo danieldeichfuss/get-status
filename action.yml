@@ -1,4 +1,4 @@
-name: 'Get Status'
+name: 'Get Status Checks'
 description: 'Get the status checks of a given ref.'
 inputs:
   ref:
