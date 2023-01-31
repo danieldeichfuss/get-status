@@ -1,5 +1,8 @@
 name: 'Get Status Checks'
 description: 'Get the status checks of a given ref.'
+branding:
+  color: 'gray-dark'
+  icon: 'check-circle'
 inputs:
   ref:
     description: 'Git ref, e.g. the sha.'
