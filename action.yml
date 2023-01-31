@@ -17,5 +17,5 @@ outputs:
   all-checks-passed:
     description: 'Returns true if all checks concluded either with success or skipped.'
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
