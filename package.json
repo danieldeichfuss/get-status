@@ -33,7 +33,7 @@
     "@octokit/plugin-rest-endpoint-methods": "^7.0.1",
     "@types/jest": "^29.4.0",
     "@types/node": "^18.11.18",
-    "@typescript-eslint/parser": "^5.50.0",
+    "@typescript-eslint/parser": "^5.59.1",
     "@vercel/ncc": "^0.36.1",
     "eslint": "^8.33.0",
     "eslint-config-prettier": "^8.6.0",
